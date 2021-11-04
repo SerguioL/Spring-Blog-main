@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Roll-dice</title>
+</head>
+<body>
+<h1 th:if="${Congratulation}">Congratulation</h1>
+<h1 th:if="!${Congratulation}">Try again</h1>
+<h2>You selected <span th:text="${n}"></span> and the correct number was <span th:text="${diceRoll}"></span></h2>
+
+<h2>Try to guess the right number:</h2>
+<ul>
+    <li><a href="/roll-dice/1">1</a></li>
+    <li><a href="/roll-dice/2">2</a></li>
+    <li><a href="/roll-dice/3">3</a></li>
+    <li><a href="/roll-dice/3">4</a></li>
+    <li><a href="/roll-dice/3">5</a></li>
+    <li><a href="/roll-dice/3">6</a></li>
+</ul>
+</body>
+</html>
