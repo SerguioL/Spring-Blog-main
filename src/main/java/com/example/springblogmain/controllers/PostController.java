@@ -4,6 +4,7 @@ import com.example.springblogmain.models.Post;
 import com.example.springblogmain.models.User;
 import com.example.springblogmain.repositories.PostRepository;
 import com.example.springblogmain.repositories.UserRepository;
+import com.example.springblogmain.services.EmailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,12 @@ public class PostController {
 
     private UserRepository userDao;
 
-    public PostController(PostRepository postDAo, UserRepository userDao) {
+    private final EmailService emailService;
+
+    public PostController(PostRepository postDAo, UserRepository userDao, EmailService emailService) {
         this.postDao = postDAo;
         this.userDao = userDao;
+        this.emailService = emailService;
     }
 
     @GetMapping("/posts")
@@ -38,12 +42,13 @@ public class PostController {
         }
 
     @PostMapping("/posts/{id}/edit")
-    public String updatePost(@PathVariable long id, @RequestParam String title, @RequestParam String body){
+    public String updatePost(@PathVariable long id, @ModelAttribute Post post){
 
-        Post post = postDao.getById(id);
-        post.setTitle(title);
-        post.setBody(body);
-        postDao.save(post);
+        Post editPost = postDao.getById(post.getId());
+        editPost.setTitle(post.getTitle());
+        editPost.setBody(post.getBody());
+
+        postDao.save(editPost);
         return "redirect:/posts";
     }
 
@@ -54,30 +59,40 @@ public class PostController {
     }
 
     @GetMapping("/posts/create")
-    public String create(){
+    public String create(Model model){
+        model.addAttribute("post",new Post());
         return "posts/create";
     }
 
     @PostMapping("/posts/create")
-    public String insert(@RequestParam String title, @RequestParam String body){
-
+    public String insert(@ModelAttribute Post post){
         User user = userDao.getOne(1L);
-
-        Post post = new Post();
-        post.setTitle(title);
-        post.setBody(body);
         post.setUser(user);
         postDao.save(post);
+        emailService.prepareAndSend(post, "you Created " + post.getTitle() , post.getBody());
         return "redirect:/posts";
     }
 
-    @GetMapping("/posts/{id}/show")
-    public String showPost(@PathVariable long id, Model model){
-        Post post = postDao.getById(id);
+//    @PostMapping("/posts/create")
+//    public String insert(@RequestParam String title, @RequestParam String body){
+//
+//        User user = userDao.getOne(1L);
+//
+//        Post post = new Post();
+//        post.setTitle(title);
+//        post.setBody(body);
+//        post.setUser(user);
+//        postDao.save(post);
+//        return "redirect:/posts";
+//    }
 
-        model.addAttribute("post",post);
-        return "posts/show";
-    }
+//    @GetMapping("/posts/{id}/show")
+//    public String showPost(@PathVariable long id, Model model){
+//        Post post = postDao.getById(id);
+//
+//        model.addAttribute("post",post);
+//        return "posts/show";
+//    }
 
 
 //    @GetMapping("/posts")
