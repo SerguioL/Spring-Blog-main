@@ -1,51 +1,82 @@
 package com.example.springblogmain.controllers;
 
 import com.example.springblogmain.models.Post;
+import com.example.springblogmain.models.User;
 import com.example.springblogmain.repositories.PostRepository;
+import com.example.springblogmain.repositories.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class PostController {
 
     //dependency injection
-    private PostRepository postDAo;
+    private PostRepository postDao;
 
-    public PostController(PostRepository postDAo) {
-        this.postDAo = postDAo;
+    private UserRepository userDao;
+
+    public PostController(PostRepository postDAo, UserRepository userDao) {
+        this.postDao = postDAo;
+        this.userDao = userDao;
     }
 
     @GetMapping("/posts")
 //    @ResponseBody
     public String index(Model model) {
-        List<Post> posts = postDAo.findAll();
+        List<Post> posts = postDao.findAll();
         model.addAttribute("posts",posts);
         return "posts/index";
     }
 
     @GetMapping("/posts/{id}/edit")
     public String returnEditView(@PathVariable long id, Model viewModel){
-        viewModel.addAttribute("post", postDAo.getById(id));
+        viewModel.addAttribute("post", postDao.getById(id));
         return "posts/edit";
         }
 
     @PostMapping("/posts/{id}/edit")
     public String updatePost(@PathVariable long id, @RequestParam String title, @RequestParam String body){
-        Post post = postDAo.getById(id);
+
+        Post post = postDao.getById(id);
         post.setTitle(title);
         post.setBody(body);
-        postDAo.save(post);
+        postDao.save(post);
         return "redirect:/posts";
     }
 
     @PostMapping("/posts/{id}/delete")
     public String deletePost(@PathVariable long id){
-        postDAo.deleteById(id);
+        postDao.deleteById(id);
         return "redirect:/posts";
+    }
+
+    @GetMapping("/posts/create")
+    public String create(){
+        return "posts/create";
+    }
+
+    @PostMapping("/posts/create")
+    public String insert(@RequestParam String title, @RequestParam String body){
+
+        User user = userDao.getOne(1L);
+
+        Post post = new Post();
+        post.setTitle(title);
+        post.setBody(body);
+        post.setUser(user);
+        postDao.save(post);
+        return "redirect:/posts";
+    }
+
+    @GetMapping("/posts/{id}/show")
+    public String showPost(@PathVariable long id, Model model){
+        Post post = postDao.getById(id);
+
+        model.addAttribute("post",post);
+        return "posts/show";
     }
 
 
@@ -62,12 +93,12 @@ public class PostController {
 //
 //        return "posts/index";
 //    }
-    @GetMapping("/posts/1")
-    public String individualPost( Model model){
-        Post post1 = new Post("titel1","body1");
-        model.addAttribute("post",post1);
-        return "posts/show";
-    }
+//    @GetMapping("/posts/1")
+//    public String individualPost( Model model){
+//        Post post1 = new Post("titel1","body1");
+//        model.addAttribute("post",post1);
+//        return "posts/show";
+//    }
 
 //    @GetMapping("/posts/{id}")
 //    @ResponseBody
