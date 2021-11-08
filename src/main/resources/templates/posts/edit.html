@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Edit</title>
@@ -8,16 +8,16 @@
 
 <h1>Edit Post</h1>
 
-<form th:method="POST">
+<form th:method="POST" th:action="@{/posts/{id}/edit(id=${id})}" th:object="${post}">
     <div>
         <label for="title">Title</label>
         <br>
-        <input name="title" id="title" type="text" placeholder="Enter Blog Posts Title" th:value="${post.title}">
+        <input name="title" th:field="*{title}" id="title" type="text" placeholder="Enter Blog Posts Title" th:value="${post.title}">
     </div>
     <div>
         <label for="body">Body</label>
         <br>
-        <textarea name="body" id="body" placeholder="Enter Blog Content" th:text="${post.body}"></textarea>
+        <textarea name="body" th:field="*{body}" id="body" placeholder="Enter Blog Content" th:text="${post.body}"></textarea>
     </div>
     <button>Edit Posts</button>
 </form>
