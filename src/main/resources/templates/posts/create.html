@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create</title>
+</head>
+<body>
+
+<h1>Create Post</h1>
+
+<form th:method="POST">
+    <div>
+        <label for="title">Title</label>
+        <br>
+        <input name="title" id="title" type="text" placeholder="Enter Blog Posts Title" >
+    </div>
+    <div>
+        <label for="body">Body</label>
+        <br>
+        <textarea name="body" id="body" placeholder="Enter Blog Content" ></textarea>
+    </div>
+<!--    <div>-->
+<!--        <label for="image_1">Image 1</label>-->
+<!--        <input id="image_1" name="urls" type="url" placeholder="enter image url">-->
+<!--        <br>-->
+<!--        <label for="image_2">Image 2</label>-->
+<!--        <input id="image_2" name="urls" type="url" placeholder="enter image url">-->
+<!--    </div>-->
+    <button>Create Posts</button>
+</form>
+
+</body>
+</html>
