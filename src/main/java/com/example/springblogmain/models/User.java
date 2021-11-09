@@ -23,11 +23,21 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Post> posts;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    private List<Ad> ads;
+
     public User(){
 
     }
 
-    public User(String username, String email, String password,List<Post> post) {
+    public User(long id, String username, String email, String password) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(String username, String email, String password, List<Post> post) {
         this.username = username;
         this.email = email;
         this.password = password;

@@ -23,5 +23,15 @@
 
 </ul>
 
+<div>
+    <p>Want to sign up for our newsletter? Enter your email!</p>
+    <form action="/coffee" method="post">
+        <legend for="email">Email:</legend>
+        <input type="email" name="email" id="email">
+        <button type="submit">Sign up</button>
+    </form>
+    <p th:if="${email}">Thanks for signing up! Newsletter will be sent to <span th:text="${email}"></span>!</p>
+</div>
+
 </body>
 </html>
