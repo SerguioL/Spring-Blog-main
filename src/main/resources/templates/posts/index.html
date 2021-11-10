@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en" >
 <head th:replace="partials/partials.html :: head ('Partials Example')"></head>
 
 <body>
@@ -9,10 +9,14 @@
 <div th:each="post : ${posts}">
     <h2 th:text="${post.title}"></h2>
     <p th:text="${post.body}"></p>
-    <a th:href="@{'/posts/' + ${post.id} +'/edit'}">Edit Post</a>
-    <form th:action="@{'/posts/' + ${post.id} +'/delete'}" th:method="POST">
-        <button>Delete button</button>
-    </form>
+<!--    <div sec:authorize="isAuthenticated()">-->
+<!--        <div th:if="${#authentication.principal.id == post.user.id}">-->
+        <a th:href="@{'/posts/' + ${post.id} +'/edit'}">Edit Post</a>
+        <form th:action="@{'/posts/' + ${post.id} +'/delete'}" th:method="POST">
+            <button>Delete button</button>
+        </form>
+<!--        </div>-->
+<!--    </div>-->
 </div>
 </div>
 </body>

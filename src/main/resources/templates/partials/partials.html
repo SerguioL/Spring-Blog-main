@@ -36,6 +36,13 @@
                 <li class="nav-item">
                     <a class="nav-link disabled">Disabled</a>
                 </li>
+                <!-- More links here... -->
+                <li>
+                    <form th:action="@{/logout}" th:method="post">
+                        <button class="btn-link btn" style="margin-top: 8px">Logout</button>
+                    </form>
+                </li>
+
             </ul>
             <form class="d-flex">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -43,6 +50,7 @@
             </form>
         </div>
     </div>
+
 </nav>
 
 <footer th:fragment="footer" id="footer">This the footer</footer>
