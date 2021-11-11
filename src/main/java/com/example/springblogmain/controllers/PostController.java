@@ -68,7 +68,8 @@ public class PostController {
     @PostMapping("/posts/create")
     public String insert(@ModelAttribute Post post){
 //        User user = userDao.getById(3L);
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User userP = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userDao.getById(userP.getId());
         post.setUser(user);
         postDao.save(post);
         emailService.prepareAndSend(post, "you Created " + post.getTitle() , post.getBody());
@@ -88,14 +89,11 @@ public class PostController {
 //        return "redirect:/posts";
 //    }
 
-//    @GetMapping("/posts/{id}/show")
-//    public String showPost(@PathVariable long id, Model model){
-//        Post post = postDao.getById(id);
-//
-//        model.addAttribute("post",post);
-//        return "posts/show";
-//    }
-
+    @GetMapping("/posts/{id}")
+    public String show(@PathVariable long id, Model viewModel) {
+        viewModel.addAttribute("post", postDao.getById(id));
+        return "posts/show";
+    }
 
 //    @GetMapping("/posts")
 //    public String post (Model model){
