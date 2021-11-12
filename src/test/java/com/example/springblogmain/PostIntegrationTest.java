@@ -121,10 +121,10 @@ public class PostIntegrationTest {
     // test post show
         @Test
         public void testPostShow()throws Exception {
-            Post firstPost = postsDao.getById(10L);
+            Post firstPost = postsDao.findAll().get(4);
             mvc.perform(get("/posts/" + firstPost.getId()))
                     .andExpect(status().isOk())// expect that status is ok
-                    .andExpect(content().string(containsString("Post Index"))) // expect content of response to include header title
+                    .andExpect(content().string(containsString("Show Post"))) // expect content of response to include header title
                     .andExpect(content().string(containsString(firstPost.getTitle())));// expect content to contain string of a post
         }
 
@@ -143,9 +143,31 @@ public class PostIntegrationTest {
         // with csrf and set session
         // expect redirection
     // test post delete
+
+    @Test
+    public void testEditPost() throws Exception {
+        List<Post> posts = postsDao.findAll();
+        Post post = posts.get(posts.size() - 1);
+        mvc.perform(post("/posts/" + post.getId() + "/edit").with(csrf())
+                .session((MockHttpSession) httpSession)
+                .param("title", "Blah Blah")
+                .param("body", "Blah Blah"))
+                .andExpect(status().is3xxRedirection());
+    }
+
         // setup similar to creating a post with csrf and session
         // expect redirection
     // test post delete
+
+    @Test
+    public void testDeletePost() throws Exception {
+        List<Post> posts = postsDao.findAll();
+        Post post = posts.get(posts.size() - 1);
+        mvc.perform(post("/posts/" + post.getId() + "/delete").with(csrf())
+                .session((MockHttpSession) httpSession))
+                .andExpect(status().is3xxRedirection());
+    }
+
         // setup similar to creating a post with csrf and session
         // expect redirection
 

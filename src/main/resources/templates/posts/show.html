@@ -4,11 +4,11 @@
 <body>
 
 <nav th:replace="partials/partials.html :: navbar"></nav>
+<header th:insert="partials/partials.html :: header('Show Post')"></header>
 
-
-<h1>Post Index</h1>
+<h1>Show Post</h1>
     <h2 th:text="${post.title}"></h2>
     <p th:text="${post.body}"></p>
-    <p th:text="${post.getUser().getEmail()}"></p>
+    <p th:text="${post.user.email}"></p>
 </body>
 </html>
